@@ -7,18 +7,14 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
-/**
- * ModItems
- */
 public class ModItems {
-  public static final Item CIGARETTE = register("cigarette");
+  public static final Item CIGARETTE = register("cigarette", new Item.Settings());
 
-  public static Item register(String name) {
+  public static Item register(String name, Item.Settings settings) {
     Identifier id = Identifier.of(Smoked.MOD_ID, name);
     RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
-    Item.Settings settings = new Item.Settings().registryKey(key);
 
-    return Registry.register(Registries.ITEM, key, new Item(settings));
+    return Registry.register(Registries.ITEM, key, new Item(settings.registryKey(key)));
   }
 
   public static void initialize() {
