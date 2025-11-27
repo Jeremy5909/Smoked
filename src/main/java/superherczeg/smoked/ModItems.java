@@ -8,12 +8,13 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import superherczeg.smoked.items.Cigarette;
-import superherczeg.smoked.items.Vape;
+import superherczeg.smoked.items.Smokable;
 
 public class ModItems {
-  public static final Item CIGARETTE = register("cigarette", Cigarette::new, new Item.Settings());
-  public static final Item VAPE = register("vape", Vape::new, new Item.Settings());
+  public static final Item CIGARETTE = register("cigarette", Smokable::new,
+      new Item.Settings().maxDamage(10));
+  public static final Item VAPE = register("vape", Smokable::new,
+      new Item.Settings().component(ModComponents.SmokeParticle, "light").maxDamage(10));
 
   public static Item register(String name, Item.Settings settings) {
     Identifier id = Identifier.of(Smoked.MOD_ID, name);

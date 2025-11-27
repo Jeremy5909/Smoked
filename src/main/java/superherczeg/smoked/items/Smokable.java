@@ -1,5 +1,6 @@
 package superherczeg.smoked.items;
 
+import superherczeg.smoked.ModComponents;
 import superherczeg.smoked.ModEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -14,12 +15,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class Cigarette extends Item {
-  public SimpleParticleType SMOKE_PARTICLE_TYPE = ParticleTypes.SMOKE;
-  public UseAction USE_ACTION = UseAction.BOW;
-
-  public Cigarette(Settings settings) {
-    super(settings.maxDamage(10));
+public class Smokable extends Item {
+  public Smokable(Settings settings) {
+    super(settings);
   }
 
   @Override
@@ -35,35 +33,54 @@ public class Cigarette extends Item {
 
   @Override
   public UseAction getUseAction(ItemStack stack) {
-    return USE_ACTION;
+    return UseAction.BOW;
+  }
+
+  protected SimpleParticleType getSmokeParticle(ItemStack stack) {
+    switch (stack.getOrDefault(ModComponents.SmokeParticle, "none")) {
+      case "dark":
+        return ParticleTypes.SMOKE;
+      case "light":
+        return ParticleTypes.CAMPFIRE_COSY_SMOKE;
+      default:
+        return ParticleTypes.SMOKE;
+    }
+  }
+
+  public void spawnParticles(World world, LivingEntity user, SimpleParticleType particleType, double distance,
+      double xSpread, double ySpread, double zSpread, double xVelSpread, double yVelSpread, double zVelSpread) {
+    Vec3d pos = user.getCameraPosVec(1.0F)
+        .add(user.getRotationVec(1.0F).multiply(distance));
+
+    double offsetX = (world.random.nextDouble() - 0.5) * xSpread;
+    double offsetY = (world.random.nextDouble() - 0.5) * ySpread;
+    double offsetZ = (world.random.nextDouble() - 0.5) * zSpread;
+
+    double xVel = (world.random.nextDouble() - 0.5) * xVelSpread;
+    double yVel = (world.random.nextDouble() - 0.5) * yVelSpread;
+    double zVel = (world.random.nextDouble() - 0.5) * zVelSpread;
+
+    world.addParticleClient(
+        particleType,
+        pos.x + offsetX,
+        pos.y + offsetY,
+        pos.z + offsetZ,
+        xVel, yVel, zVel);
   }
 
   int ticks_smoked = 0;
 
   @Override
   public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+
     if (world.isClient()) {
       ticks_smoked++;
       if (ticks_smoked % 40 == 39) {
         user.addStatusEffect(
             new StatusEffectInstance(ModEffects.BUZZ, 20, 1));
       }
-
       if (world.random.nextInt(80) == 0) {
-        Vec3d pos = user.getCameraPosVec(1.0F)
-            .add(user.getRotationVec(1.0F).multiply(0.4));
-
-        double offsetX = (world.random.nextDouble() - 0.5) * 0.1;
-        double offsetY = world.random.nextDouble() * 0.1;
-        double offsetZ = (world.random.nextDouble() - 0.5) * 0.1;
-
-        world.addParticleClient(
-            SMOKE_PARTICLE_TYPE,
-            pos.x + offsetX,
-            pos.y + offsetY,
-            pos.z + offsetZ,
-            0.0, 0.01, 0.0);
-
+        spawnParticles(world, user, getSmokeParticle(stack), 0.4, 0.1, 0.1, 0.1, 0.0, 0.01, 0.0);
       }
     }
   }
@@ -71,6 +88,7 @@ public class Cigarette extends Item {
   @Override
   public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
     if (world.isClient()) {
+
       Vec3d pos = user.getCameraPosVec(1.0F)
           .add(user.getRotationVec(1.0F).multiply(0.5));
 
@@ -81,22 +99,7 @@ public class Cigarette extends Item {
       stack.damage(damageAmount, (PlayerEntity) user);
 
       for (int i = 0; i < particleCount; i++) {
-        double offsetX = (world.random.nextDouble() - 0.5) * 0.5;
-        double offsetY = (world.random.nextDouble() - 0.5) * 0.5;
-        double offsetZ = (world.random.nextDouble() - 0.5) * 0.2;
-
-        double velX = (world.random.nextDouble() - 0.5) * 0.03; // slight drift
-        double velY = world.random.nextDouble() * 0.03; // slow upward motion
-        double velZ = (world.random.nextDouble() - 0.5) * 0.03; // slight drift
-
-        world.addParticleClient(
-            SMOKE_PARTICLE_TYPE,
-            pos.x + offsetX,
-            pos.y + offsetY,
-            pos.z + offsetZ,
-            velX,
-            velY,
-            velZ);
+        spawnParticles(world, user, getSmokeParticle(stack), 0.5, 0.5, 0.5, 0.2, 0.03, 0.03, 0.03);
       }
     }
 

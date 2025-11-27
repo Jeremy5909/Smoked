@@ -13,5 +13,6 @@ public class Smoked implements ModInitializer {
   public void onInitialize() {
     ModItems.initialize();
     ModEffects.initialize();
+    ModComponents.initialize();
   }
 }
