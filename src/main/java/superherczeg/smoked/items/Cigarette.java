@@ -6,19 +6,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.consume.UseAction;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class Cigarette extends Item {
+  public SimpleParticleType SMOKE_PARTICLE_TYPE = ParticleTypes.SMOKE;
+  public UseAction USE_ACTION = UseAction.BOW;
+
   public Cigarette(Settings settings) {
     super(settings.maxDamage(10));
-  }
-
-  public Cigarette(RegistryKey<Item> registryKey) {
-    super(new Item.Settings().registryKey(registryKey));
   }
 
   @Override
@@ -34,7 +33,7 @@ public class Cigarette extends Item {
 
   @Override
   public UseAction getUseAction(ItemStack stack) {
-    return UseAction.BOW;
+    return USE_ACTION;
   }
 
   @Override
@@ -49,7 +48,7 @@ public class Cigarette extends Item {
         double offsetZ = (world.random.nextDouble() - 0.5) * 0.1;
 
         world.addParticleClient(
-            ParticleTypes.SMOKE,
+            SMOKE_PARTICLE_TYPE,
             pos.x + offsetX,
             pos.y + offsetY,
             pos.z + offsetZ,
@@ -81,7 +80,7 @@ public class Cigarette extends Item {
         double velZ = (world.random.nextDouble() - 0.5) * 0.03; // slight drift
 
         world.addParticleClient(
-            ParticleTypes.SMOKE,
+            SMOKE_PARTICLE_TYPE,
             pos.x + offsetX,
             pos.y + offsetY,
             pos.z + offsetZ,

@@ -6,9 +6,9 @@
 	},
 	"elements": [
 		{
-			"from": [8, 0, 4],
-			"to": [9, 1, 9],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 0.5, 4.5]},
+			"from": [8, 4, 6],
+			"to": [9, 5, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 4.5, 10.5]},
 			"faces": {
 				"north": {"uv": [2, 2, 3, 3], "texture": "#0"},
 				"east": {"uv": [0, 0, 5, 1], "texture": "#0"},
@@ -21,17 +21,17 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [-0.75, 7.5, 1]
+			"translation": [-0.75, -0.25, 1]
 		},
 		"thirdperson_lefthand": {
 			"translation": [0, 7.5, 0]
 		},
 		"firstperson_righthand": {
-			"rotation": [-3, 0, 0],
-			"translation": [-2.5, 10, 2.75]
+			"rotation": [-28, -20, 0],
+			"translation": [0.75, 5.25, -0.5]
 		},
 		"firstperson_lefthand": {
-			"translation": [0, 7.5, 0]
+			"translation": [-8.75, 7.5, 0]
 		},
 		"ground": {
 			"translation": [0, 5.75, 0]
