@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 import superherczeg.smoked.items.Cigarette;
 import superherczeg.smoked.items.Vape;
 
-public class Items {
+public class ModItems {
   public static final Item CIGARETTE = register("cigarette", Cigarette::new, new Item.Settings());
   public static final Item VAPE = register("vape", Vape::new, new Item.Settings());
 

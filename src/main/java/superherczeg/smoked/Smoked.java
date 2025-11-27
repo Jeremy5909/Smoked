@@ -11,6 +11,7 @@ public class Smoked implements ModInitializer {
 
   @Override
   public void onInitialize() {
-    Items.initialize();
+    ModItems.initialize();
+    ModEffects.initialize();
   }
 }

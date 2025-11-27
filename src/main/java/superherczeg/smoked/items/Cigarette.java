@@ -1,6 +1,8 @@
 package superherczeg.smoked.items;
 
+import superherczeg.smoked.ModEffects;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,10 +38,18 @@ public class Cigarette extends Item {
     return USE_ACTION;
   }
 
+  int ticks_smoked = 0;
+
   @Override
   public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
     if (world.isClient()) {
-      if (world.random.nextInt(40) == 0) {
+      ticks_smoked++;
+      if (ticks_smoked % 40 == 39) {
+        user.addStatusEffect(
+            new StatusEffectInstance(ModEffects.BUZZ, 20, 1));
+      }
+
+      if (world.random.nextInt(80) == 0) {
         Vec3d pos = user.getCameraPosVec(1.0F)
             .add(user.getRotationVec(1.0F).multiply(0.4));
 
