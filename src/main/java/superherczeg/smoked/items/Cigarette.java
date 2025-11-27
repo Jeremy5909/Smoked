@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 public class Cigarette extends Item {
   public Cigarette(Settings settings) {
-    super(settings);
+    super(settings.maxDamage(10));
   }
 
   public Cigarette(RegistryKey<Item> registryKey) {
@@ -40,7 +40,7 @@ public class Cigarette extends Item {
   @Override
   public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
     if (world.isClient()) {
-      if (world.random.nextInt(20) == 0) {
+      if (world.random.nextInt(40) == 0) {
         Vec3d pos = user.getCameraPosVec(1.0F)
             .add(user.getRotationVec(1.0F).multiply(0.4));
 
@@ -66,7 +66,10 @@ public class Cigarette extends Item {
           .add(user.getRotationVec(1.0F).multiply(0.5));
 
       int heldTicks = this.getMaxUseTime(stack, user) - remainingUseTicks;
+      int damageAmount = Math.max(1, heldTicks / 20);
       int particleCount = heldTicks / 4;
+
+      stack.damage(damageAmount, (PlayerEntity) user);
 
       for (int i = 0; i < particleCount; i++) {
         double offsetX = (world.random.nextDouble() - 0.5) * 0.5;
