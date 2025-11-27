@@ -38,28 +38,57 @@ public class Cigarette extends Item {
   }
 
   @Override
-  public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+  public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
     if (world.isClient()) {
-      Vec3d pos = user.getCameraPosVec(1.0F).add(user.getRotationVec(1.0F).multiply(0.5));
-      // Spawn a bunch of smoke particles
-      for (int i = 0; i < 10; i++) {
-        double offsetX = (world.random.nextDouble() - 0.5) * 0.2;
-        double offsetY = world.random.nextDouble() * 0.2;
-        double offsetZ = (world.random.nextDouble() - 0.5) * 0.2;
+      if (world.random.nextInt(20) == 0) {
+        Vec3d pos = user.getCameraPosVec(1.0F)
+            .add(user.getRotationVec(1.0F).multiply(0.4));
+
+        double offsetX = (world.random.nextDouble() - 0.5) * 0.1;
+        double offsetY = world.random.nextDouble() * 0.1;
+        double offsetZ = (world.random.nextDouble() - 0.5) * 0.1;
 
         world.addParticleClient(
             ParticleTypes.SMOKE,
             pos.x + offsetX,
             pos.y + offsetY,
             pos.z + offsetZ,
-            0.0,
-            0.05,
-            0.0);
-      }
+            0.0, 0.01, 0.0);
 
+      }
+    }
+  }
+
+  @Override
+  public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    if (world.isClient()) {
+      Vec3d pos = user.getCameraPosVec(1.0F)
+          .add(user.getRotationVec(1.0F).multiply(0.5));
+
+      int heldTicks = this.getMaxUseTime(stack, user) - remainingUseTicks;
+      int particleCount = heldTicks / 4;
+
+      for (int i = 0; i < particleCount; i++) {
+        double offsetX = (world.random.nextDouble() - 0.5) * 0.5;
+        double offsetY = (world.random.nextDouble() - 0.5) * 0.5;
+        double offsetZ = (world.random.nextDouble() - 0.5) * 0.2;
+
+        double velX = (world.random.nextDouble() - 0.5) * 0.03; // slight drift
+        double velY = world.random.nextDouble() * 0.03; // slow upward motion
+        double velZ = (world.random.nextDouble() - 0.5) * 0.03; // slight drift
+
+        world.addParticleClient(
+            ParticleTypes.SMOKE,
+            pos.x + offsetX,
+            pos.y + offsetY,
+            pos.z + offsetZ,
+            velX,
+            velY,
+            velZ);
+      }
     }
 
-    return stack;
+    return true;
   }
 
 }

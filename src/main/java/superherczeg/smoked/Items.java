@@ -10,7 +10,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import superherczeg.smoked.items.Cigarette;
 
-public class ModItems {
+public class Items {
   // public static final Item CIGARETTE = register("cigarette", new
   // Item.Settings());
   public static final Item CIGARETTE = register("cigarette", Cigarette::new, new Item.Settings());
