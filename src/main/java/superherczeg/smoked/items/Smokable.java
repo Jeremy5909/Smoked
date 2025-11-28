@@ -76,13 +76,24 @@ public class Smokable extends Item {
     int ticksUsed = stack.getMaxUseTime(user) - remainingUseTicks;
 
     if (!world.isClient()) {
-      if (ticksUsed % 40 == 39) {
+
+      // Every 2 seconds
+      if (ticksUsed % 40 == 0) {
         user.addStatusEffect(
-            new StatusEffectInstance(StatusEffects.SATURATION, 20));
+            new StatusEffectInstance(StatusEffects.SATURATION));
+
+        int currentDuration = 0;
+        if (user.hasStatusEffect(ModEffects.BUZZ)) {
+          currentDuration = user.getStatusEffect(ModEffects.BUZZ).getDuration();
+        }
+        // Add 8 seconds for every 2 seconds held
+        int newDuration = currentDuration + 20 * 8;
         user.addStatusEffect(
-            new StatusEffectInstance(ModEffects.BUZZ, 10 * 20));
+            new StatusEffectInstance(ModEffects.BUZZ, newDuration));
+
       }
-    } else if (world.random.nextInt(80) == 0) {
+      // Every 4 seconds on average
+    } else if (world.random.nextInt(20 * 4) == 0) {
       spawnParticles(world, user, getSmokeParticle(stack), 0.4, 0.1, 0.1, 0.1, 0.0, 0.01, 0.0);
     }
 
