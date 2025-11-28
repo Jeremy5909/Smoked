@@ -4,6 +4,7 @@ import superherczeg.smoked.ModComponents;
 import superherczeg.smoked.ModEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,17 +73,19 @@ public class Smokable extends Item {
 
   @Override
   public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+    int ticksUsed = stack.getMaxUseTime(user) - remainingUseTicks;
 
-    if (world.isClient()) {
-      ticks_smoked++;
-      if (ticks_smoked % 40 == 39) {
+    if (!world.isClient()) {
+      if (ticksUsed % 40 == 39) {
         user.addStatusEffect(
-            new StatusEffectInstance(ModEffects.BUZZ, 20, 1));
+            new StatusEffectInstance(StatusEffects.SATURATION, 20));
+        user.addStatusEffect(
+            new StatusEffectInstance(ModEffects.BUZZ, 10 * 20));
       }
-      if (world.random.nextInt(80) == 0) {
-        spawnParticles(world, user, getSmokeParticle(stack), 0.4, 0.1, 0.1, 0.1, 0.0, 0.01, 0.0);
-      }
+    } else if (world.random.nextInt(80) == 0) {
+      spawnParticles(world, user, getSmokeParticle(stack), 0.4, 0.1, 0.1, 0.1, 0.0, 0.01, 0.0);
     }
+
   }
 
   @Override

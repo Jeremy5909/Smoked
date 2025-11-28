@@ -16,13 +16,6 @@ public class ModItems {
   public static final Item VAPE = register("vape", Smokable::new,
       new Item.Settings().component(ModComponents.SmokeParticle, "light").maxDamage(10));
 
-  public static Item register(String name, Item.Settings settings) {
-    Identifier id = Identifier.of(Smoked.MOD_ID, name);
-    RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
-
-    return Registry.register(Registries.ITEM, key, new Item(settings.registryKey(key)));
-  }
-
   public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
     Identifier id = Identifier.of(Smoked.MOD_ID, name);
     RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
