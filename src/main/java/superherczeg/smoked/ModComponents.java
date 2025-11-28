@@ -12,6 +12,10 @@ import net.minecraft.util.Identifier;
 public class ModComponents {
   public static final ComponentType<String> SmokeParticle = register("smoke_particle",
       ComponentType.<String>builder().codec(Codec.STRING).build());
+  public static final ComponentType<Integer> HitInterval = register("hit_interval",
+      ComponentType.<Integer>builder().codec(Codec.INT).build());
+  public static final ComponentType<Integer> HitLength = register("hit_length",
+      ComponentType.<Integer>builder().codec(Codec.INT).build());
 
   public static <T> ComponentType<T> register(String name, ComponentType<T> componentType) {
     Identifier id = Identifier.of(Smoked.MOD_ID, name);

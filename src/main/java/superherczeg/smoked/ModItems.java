@@ -12,9 +12,11 @@ import superherczeg.smoked.items.Smokable;
 
 public class ModItems {
   public static final Item CIGARETTE = register("cigarette", Smokable::new,
-      new Item.Settings().maxDamage(10));
+      new Item.Settings().maxDamage(6).component(ModComponents.HitInterval, 3 * 20).component(ModComponents.HitLength,
+          15 * 20));
   public static final Item VAPE = register("vape", Smokable::new,
-      new Item.Settings().component(ModComponents.SmokeParticle, "light").maxDamage(10));
+      new Item.Settings().maxDamage(20).component(ModComponents.SmokeParticle, "light")
+          .component(ModComponents.HitInterval, 30).component(ModComponents.HitLength, 8 * 20));
 
   public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
     Identifier id = Identifier.of(Smoked.MOD_ID, name);

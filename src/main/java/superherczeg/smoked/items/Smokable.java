@@ -22,11 +22,6 @@ public class Smokable extends Item {
   }
 
   @Override
-  public int getMaxUseTime(ItemStack stack, LivingEntity user) {
-    return 4096;
-  }
-
-  @Override
   public ActionResult use(World world, PlayerEntity user, Hand hand) {
     user.setCurrentHand(hand);
     return ActionResult.CONSUME;
@@ -75,10 +70,14 @@ public class Smokable extends Item {
   public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
     int ticksUsed = stack.getMaxUseTime(user) - remainingUseTicks;
 
-    if (!world.isClient()) {
+    int hitInterval = stack.getOrDefault(ModComponents.HitInterval, 2 * 20);
+    int hitLength = stack.getOrDefault(ModComponents.HitLength, 8 * 20);
 
-      // Every 2 seconds
-      if (ticksUsed % 40 == 0) {
+    if (!world.isClient()) {
+      if (ticksUsed % hitInterval == hitInterval - 1) {
+        // That shi hit
+        stack.damage(1, (PlayerEntity) user);
+
         user.addStatusEffect(
             new StatusEffectInstance(StatusEffects.SATURATION));
 
@@ -86,13 +85,11 @@ public class Smokable extends Item {
         if (user.hasStatusEffect(ModEffects.BUZZ)) {
           currentDuration = user.getStatusEffect(ModEffects.BUZZ).getDuration();
         }
-        // Add 8 seconds for every 2 seconds held
-        int newDuration = currentDuration + 20 * 8;
+        int newDuration = currentDuration + hitLength;
         user.addStatusEffect(
             new StatusEffectInstance(ModEffects.BUZZ, newDuration));
 
       }
-      // Every 4 seconds on average
     } else if (world.random.nextInt(20 * 4) == 0) {
       spawnParticles(world, user, getSmokeParticle(stack), 0.4, 0.1, 0.1, 0.1, 0.0, 0.01, 0.0);
     }
