@@ -2,6 +2,8 @@ package superherczeg.smoked;
 
 import java.util.function.Function;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -16,7 +18,8 @@ public class ModItems {
           15 * 20));
   public static final Item VAPE = register("vape", Smokable::new,
       new Item.Settings().maxDamage(20).component(ModComponents.SmokeParticle, "light")
-          .component(ModComponents.HitInterval, 30).component(ModComponents.HitLength, 8 * 20));
+          .component(ModComponents.HitInterval, 30).component(ModComponents.HitLength, 8 * 20)
+          .component(DataComponentTypes.DYED_COLOR, new DyedColorComponent(DyedColorComponent.DEFAULT_COLOR)));
 
   public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
     Identifier id = Identifier.of(Smoked.MOD_ID, name);

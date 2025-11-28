@@ -1,5 +1,6 @@
 {
   "effect.smoked.buzz": "Buzz",
   "item.smoked.cigarette": "Cigarette",
-  "item.smoked.vape": "Vape"
+  "item.smoked.vape": "Vape",
+  "itemGroup.smoked.group": "Smoked"
 }
