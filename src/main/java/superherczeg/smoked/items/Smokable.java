@@ -22,6 +22,11 @@ public class Smokable extends Item {
   }
 
   @Override
+  public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    return 72000;
+  }
+
+  @Override
   public ActionResult use(World world, PlayerEntity user, Hand hand) {
     user.setCurrentHand(hand);
     return ActionResult.CONSUME;
