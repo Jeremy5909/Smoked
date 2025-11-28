@@ -74,6 +74,7 @@ public class Smokable extends Item {
     int hitLength = stack.getOrDefault(ModComponents.HitLength, 8 * 20);
 
     if (!world.isClient()) {
+      // Server
       if (ticksUsed % hitInterval == hitInterval - 1) {
         // That shi hit
         stack.damage(1, (PlayerEntity) user);
@@ -91,23 +92,16 @@ public class Smokable extends Item {
 
       }
     } else if (world.random.nextInt(20 * 4) == 0) {
+      // Client
       spawnParticles(world, user, getSmokeParticle(stack), 0.4, 0.1, 0.1, 0.1, 0.0, 0.01, 0.0);
     }
-
   }
 
   @Override
   public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
     if (world.isClient()) {
-
-      Vec3d pos = user.getCameraPosVec(1.0F)
-          .add(user.getRotationVec(1.0F).multiply(0.5));
-
-      int heldTicks = this.getMaxUseTime(stack, user) - remainingUseTicks;
-      int damageAmount = Math.max(1, heldTicks / 20);
-      int particleCount = heldTicks / 4;
-
-      stack.damage(damageAmount, (PlayerEntity) user);
+      int heldTicks = stack.getMaxUseTime(user) - remainingUseTicks;
+      int particleCount = heldTicks / 5;
 
       for (int i = 0; i < particleCount; i++) {
         spawnParticles(world, user, getSmokeParticle(stack), 0.5, 0.5, 0.5, 0.2, 0.03, 0.03, 0.03);
